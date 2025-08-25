@@ -2,14 +2,12 @@ substitutions:
   _TERRAFORM_IMAGE: 'hashicorp/terraform'
   _TERRAFORM_VERSION: 'latest'
 timeout: '2700s'
-
+logs_bucket: 'gs://project_code_samples'
 steps:
 
 - id: 'tf-init'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
-  args:
-    - 'init'
-
+  args: ['init']
   dir: 'source/${_GHE_CONFIG_PATH}'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
@@ -31,19 +29,14 @@ steps:
   args:
     - 'plan'
     - '-input=false'
-    - '-lock=false'
-
+    - '-lock=false'  # Consider removing this in production
   dir: 'source/${_GHE_CONFIG_PATH}'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
-
 - id: 'checkov-scan'
   name: 'bridgecrew/checkov:latest'
   entrypoint: 'checkov'
-  args:
-    - '-d'
-    - '.'
+  args: ['-d', '.']
   dir: 'source/${_GHE_CONFIG_PATH}'
-
 
