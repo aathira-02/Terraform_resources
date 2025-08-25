@@ -31,7 +31,7 @@ steps:
     - 'plan'
     - '-input=false'
     - '-lock=false'  # Consider removing this in production
-  ddir: '${_ENV_DIR}'
+  dir: '${_ENV_DIR}'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
