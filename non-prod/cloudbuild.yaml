@@ -39,4 +39,3 @@ steps:
   entrypoint: 'checkov'
   args: ['-d', '.']
   dir: 'source/${_GHE_CONFIG_PATH}'
-
