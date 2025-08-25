@@ -1,0 +1,59 @@
+substitutions:
+  _TERRAFORM_IMAGE: 'hashicorp/terraform'
+  _TERRAFORM_VERSION: 'latest'
+  _GHE_CONFIG_PATH: 'dev'
+timeout: '2700s'
+
+steps:
+
+- id: 'debug-ls'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "Listing files in source/${_GHE_CONFIG_PATH}:"
+      ls -la source/${_GHE_CONFIG_PATH}
+
+- id: 'tf-init'
+  name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
+  args:
+    - 'init'
+
+  dir: 'source/${_GHE_CONFIG_PATH}'
+  env:
+    - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+
+- id: 'tf-format'
+  name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
+  args: ['fmt', '-list=true', '-write=false', '-diff=true', '-check=true', '.']
+  dir: 'source/${_GHE_CONFIG_PATH}'
+  waitFor: ['tf-init']
+
+- id: 'tf-validate'
+  name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
+  args: ['validate']
+  dir: 'source/${_GHE_CONFIG_PATH}'
+  waitFor: ['tf-init']
+
+- id: 'tf-plan'
+  name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
+  args:
+    - 'plan'
+    - '-input=false'
+    - '-lock=false'
+
+  dir: 'source/${_GHE_CONFIG_PATH}'
+  env:
+    - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+
+
+- id: 'checkov-scan'
+  name: 'bridgecrew/checkov:latest'
+  entrypoint: 'checkov'
+  args:
+    - '-d'
+    - '.'
+  dir: 'source/${_GHE_CONFIG_PATH}'
+
+
