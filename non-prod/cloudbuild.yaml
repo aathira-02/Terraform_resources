@@ -9,20 +9,20 @@ steps:
 - id: 'tf-init'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
   args: ['init']
-  dir: './non-prod'
+  dir: 'source/non-prod'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
 - id: 'tf-format'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
   args: ['fmt', '-list=true', '-write=false', '-diff=true', '-check=true', '.']
-  dir: './non-prod'
+  dir: 'source/non-prod'
   waitFor: ['tf-init']
 
 - id: 'tf-validate'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
   args: ['validate']
-  dir: './non-prod'
+  dir: 'source/non-prod'
   waitFor: ['tf-init']
 
 - id: 'tf-plan'
@@ -31,7 +31,7 @@ steps:
     - 'plan'
     - '-input=false'
     - '-lock=false'  # Consider removing this in production
-  dir: './non-prod'
+  dir: 'source/non-prod'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
@@ -39,5 +39,5 @@ steps:
   name: 'bridgecrew/checkov:latest'
   entrypoint: 'checkov'
   args: ['-d', '.']
-  dir: './non-prod'
+  dir: 'source/non-prod'
 
