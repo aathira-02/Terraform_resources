@@ -12,9 +12,9 @@ resource "google_compute_instance" "VM-instance" {
 
   boot_disk {
     initialize_params {
-      size     = var.bootdisk_size  
-      type     = var.disk
-      image    = var.image
+      size  = var.bootdisk_size
+      type  = var.disk
+      image = var.image
     }
 
     # Optional: Encrypt with your own key (uncomment and use if needed)
@@ -35,7 +35,7 @@ resource "google_compute_instance" "VM-instance" {
   }
 
   service_account {
-    email  = var.service_account_email  # Ensure this is NOT default SA
+    email  = var.service_account_email # Ensure this is NOT default SA
     scopes = ["https://www.googleapis.com/auth/compute.readonly"]
   }
 }

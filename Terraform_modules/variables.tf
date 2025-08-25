@@ -1,17 +1,17 @@
-variable "name"{
-    type = string
-}
- 
-variable "machine_type"{
-    type = string
-}
- 
-variable "zone"{
-    type = string
+variable "name" {
+  type = string
 }
 
-variable "region"{
-    type = string
+variable "machine_type" {
+  type = string
+}
+
+variable "zone" {
+  type = string
+}
+
+variable "region" {
+  type = string
 }
 variable "disk" {
   type        = string
@@ -19,18 +19,18 @@ variable "disk" {
 }
 
 
-variable "bootdisk_size"{
-    type = string
+variable "bootdisk_size" {
+  type = string
 }
 
 
-variable "project_id"{
-    type = string
+variable "project_id" {
+  type = string
 }
 
 
-variable "image"{
-    type = string
+variable "image" {
+  type = string
 }
 
 variable "network_self_link" {
@@ -49,6 +49,6 @@ variable "service_account_email" {
 }
 
 
-variable "deletion_protection"{
-    type = bool
+variable "deletion_protection" {
+  type = bool
 }
