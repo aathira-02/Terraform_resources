@@ -8,27 +8,6 @@ logs_bucket: 'gs://project_code_samples'
 
 steps:
 
-# Debugging step to verify workspace layout
-- id: 'debug-list'
-  name: 'alpine'
-  entrypoint: 'sh'
-  args:
-    - -c
-    - |
-      echo "=== Workspace contents ==="
-      ls -R /workspace
-
-# Confirm module path exists from working directory
-- id: 'show-module-path'
-  name: 'alpine'
-  entrypoint: 'sh'
-  args:
-    - -c
-    - |
-      echo "Checking ../Terraform_modules from within ${_GHE_CONFIG_PATH}"
-      ls ../Terraform_modules
-  dir: '${_GHE_CONFIG_PATH}'
-
 # Terraform init
 - id: 'tf-init'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
