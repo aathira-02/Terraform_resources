@@ -1,7 +1,7 @@
 substitutions:
   _TERRAFORM_IMAGE: 'hashicorp/terraform'
   _TERRAFORM_VERSION: 'latest'
-  _GHE_CONFIG_PATH: 'non-prod'
+  _GHE_CONFIG_PATH: '/workspace/non-prod'
   
 timeout: '2700s'
 logs_bucket: 'gs://project_code_samples'
