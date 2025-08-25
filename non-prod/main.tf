@@ -1,5 +1,5 @@
 module "vm-instance" {
-  source                 = "./Terraform_module"
+  source                 = "../Terraform_module"
   project_id             = "mythic-cocoa-463514-i6"
   name                   = "new-test-vm"
   region                 = "us-central1"
