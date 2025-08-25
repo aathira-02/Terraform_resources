@@ -1,6 +1,7 @@
 substitutions:
   _TERRAFORM_IMAGE: 'hashicorp/terraform'
   _TERRAFORM_VERSION: 'latest'
+  _ENV_DIR: 'non-prod'
 timeout: '2700s'
 logs_bucket: 'gs://project_code_samples'
 steps:
@@ -8,20 +9,20 @@ steps:
 - id: 'tf-init'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
   args: ['init']
-  dir: '.'
+  dir: '${_ENV_DIR}'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
 - id: 'tf-format'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
   args: ['fmt', '-list=true', '-write=false', '-diff=true', '-check=true', '.']
-  dir: '.'
+  dir: '${_ENV_DIR}'
   waitFor: ['tf-init']
 
 - id: 'tf-validate'
   name: '${_TERRAFORM_IMAGE}:${_TERRAFORM_VERSION}'
   args: ['validate']
-  dir: '.'
+  dir: '${_ENV_DIR}'
   waitFor: ['tf-init']
 
 - id: 'tf-plan'
@@ -30,7 +31,7 @@ steps:
     - 'plan'
     - '-input=false'
     - '-lock=false'  # Consider removing this in production
-  dir: '.'
+  ddir: '${_ENV_DIR}'
   env:
     - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
 
@@ -38,5 +39,5 @@ steps:
   name: 'bridgecrew/checkov:latest'
   entrypoint: 'checkov'
   args: ['-d', '.']
-  dir: '.'
+  dir: '${_ENV_DIR}'
 
